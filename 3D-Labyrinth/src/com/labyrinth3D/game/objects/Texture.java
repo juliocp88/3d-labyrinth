@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLUtils;
+import com.labyrinth3D.math.Vector2;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,7 +16,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Texture
 {
-
     private int[] texCoord;
     public int texPointer;
 
@@ -51,7 +51,7 @@ public class Texture
         gl.glGenTextures(1, texCoord, 0);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, texCoord[0]);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR_MIPMAP_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR_MIPMAP_LINEAR);
 
         makeMipmap(bitmap);
         bitmap.recycle();
@@ -74,7 +74,8 @@ public class Texture
 
             height = height / 2;
             width = width / 2;
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+            //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+            Bitmap scaledBitmap = Bitmap.createBitmap(width, height, bitmap.getConfig());
             for (int i = 0; i < scaledBitmap.getHeight(); i++)
             {
                 for (int j = 0; j < scaledBitmap.getWidth(); j++)
@@ -94,6 +95,24 @@ public class Texture
             bitmap.recycle();
             bitmap = scaledBitmap;
         }
+    }
+    
+    public static Vector2[] getAtlasTexCoordinates(int x, int y, int size)
+    {
+        float length = 1.0f / size;
+        
+        Vector2 topLeft = new Vector2(x * length + length / 4, y * length + length / 4);
+        Vector2 topRight = new Vector2(x * length + 3 * length / 4, y * length + length / 4);
+        Vector2 botRight = new Vector2(x * length + 3 * length / 4, y * length + 3 * length / 4); 
+        Vector2 botLeft = new Vector2(x * length + length / 4, y * length + 3 * length / 4);
+        
+        return new Vector2[] 
+        {
+            topLeft,
+            topRight,
+            botRight,
+            botLeft,
+        };
     }
     
     public void destroy(GL10 gl)

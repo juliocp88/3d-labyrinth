@@ -18,16 +18,13 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Map extends Object3D
 {
-
     private int[][] map;
     private int verticesCount;
     private int triangleCount;
-    
     private int vbo;
     private int nbo;
     private int tbo;
     private int ibo;
-    
     private Rect[] wallBoundingBoxes;
 
     public Map(int[][] map, Texture texture, GL11 gl)
@@ -53,26 +50,26 @@ public class Map extends Object3D
                     verticesCount += 4;
                     triangleCount += 2;
                     wallCount++;
-                    
+
                     if (i > 0 && map[i - 1][j] < 2)
                     {
-                    verticesCount += 4;
-                    triangleCount += 2;
+                        verticesCount += 4;
+                        triangleCount += 2;
                     }
                     if (j > 0 && map[i][j - 1] < 2)
                     {
-                    verticesCount += 4;
-                    triangleCount += 2;
+                        verticesCount += 4;
+                        triangleCount += 2;
                     }
                     if (i < map.length - 1 && map[i + 1][j] < 2)
                     {
-                    verticesCount += 4;
-                    triangleCount += 2;
+                        verticesCount += 4;
+                        triangleCount += 2;
                     }
                     if (j < map[0].length - 1 && map[i][j + 1] < 2)
                     {
-                    verticesCount += 4;
-                    triangleCount += 2;
+                        verticesCount += 4;
+                        triangleCount += 2;
                     }
                 }
             }
@@ -135,17 +132,18 @@ public class Map extends Object3D
                     normals[normIdx++] = -1f;
 
                     //Texture coordinates
-                    texCoord[textIdx++] = 0.625f;
-                    texCoord[textIdx++] = 0.625f;
+                    Vector2[] atlasCoords = Texture.getAtlasTexCoordinates(1, 1, 2);
+                    texCoord[textIdx++] = atlasCoords[0].x;
+                    texCoord[textIdx++] = atlasCoords[0].y;
 
-                    texCoord[textIdx++] = 0.875f;
-                    texCoord[textIdx++] = 0.625f;
+                    texCoord[textIdx++] = atlasCoords[1].x;
+                    texCoord[textIdx++] = atlasCoords[1].y;
 
-                    texCoord[textIdx++] = 0.875f;
-                    texCoord[textIdx++] = 0.875f;
+                    texCoord[textIdx++] = atlasCoords[2].x;
+                    texCoord[textIdx++] = atlasCoords[2].y;
 
-                    texCoord[textIdx++] = 0.625f;
-                    texCoord[textIdx++] = 0.875f;
+                    texCoord[textIdx++] = atlasCoords[3].x;
+                    texCoord[textIdx++] = atlasCoords[3].y;
 
                     //Triangles
                     indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -193,17 +191,18 @@ public class Map extends Object3D
                     normals[normIdx++] = -1f;
 
                     //Texture coordinates
-                    texCoord[textIdx++] = 0.125f;
-                    texCoord[textIdx++] = 0.125f;
+                    Vector2[] atlasCoords = Texture.getAtlasTexCoordinates(0, 0, 2);
+                    texCoord[textIdx++] = atlasCoords[0].x;
+                    texCoord[textIdx++] = atlasCoords[0].y;
 
-                    texCoord[textIdx++] = 0.375f;
-                    texCoord[textIdx++] = 0.125f;
+                    texCoord[textIdx++] = atlasCoords[1].x;
+                    texCoord[textIdx++] = atlasCoords[1].y;
 
-                    texCoord[textIdx++] = 0.375f;
-                    texCoord[textIdx++] = 0.375f;
+                    texCoord[textIdx++] = atlasCoords[2].x;
+                    texCoord[textIdx++] = atlasCoords[2].y;
 
-                    texCoord[textIdx++] = 0.125f;
-                    texCoord[textIdx++] = 0.375f;
+                    texCoord[textIdx++] = atlasCoords[3].x;
+                    texCoord[textIdx++] = atlasCoords[3].y;
 
                     //Triangles
                     indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -219,7 +218,7 @@ public class Map extends Object3D
                     //Bounding boxes
                     wallBoundingBoxes[wallCount++] = new Rect((int) (position.x + j) * 100, (int) (position.y + i) * 100, (int) (position.x + j) * 100 + 100, (int) (position.y + i) * 100 + 100);
                     System.out.println("Bounding box: " + wallBoundingBoxes[wallCount - 1].toShortString());
-                    
+
                     //Vertices
                     vertices[vertextIdx++] = position.x + j;
                     vertices[vertextIdx++] = position.y - i;
@@ -255,17 +254,18 @@ public class Map extends Object3D
                     normals[normIdx++] = -1f;
 
                     //Texture coordinates
-                    texCoord[textIdx++] = 0.125f;
-                    texCoord[textIdx++] = 0.625f;
+                    Vector2[] atlasCoords = Texture.getAtlasTexCoordinates(0, 1, 2);
+                    texCoord[textIdx++] = atlasCoords[0].x;
+                    texCoord[textIdx++] = atlasCoords[0].y;
 
-                    texCoord[textIdx++] = 0.375f;
-                    texCoord[textIdx++] = 0.625f;
+                    texCoord[textIdx++] = atlasCoords[1].x;
+                    texCoord[textIdx++] = atlasCoords[1].y;
 
-                    texCoord[textIdx++] = 0.375f;
-                    texCoord[textIdx++] = 0.875f;
+                    texCoord[textIdx++] = atlasCoords[2].x;
+                    texCoord[textIdx++] = atlasCoords[2].y;
 
-                    texCoord[textIdx++] = 0.125f;
-                    texCoord[textIdx++] = 0.875f;
+                    texCoord[textIdx++] = atlasCoords[3].x;
+                    texCoord[textIdx++] = atlasCoords[3].y;
 
                     //Triangles
                     indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -313,17 +313,18 @@ public class Map extends Object3D
                         normals[normIdx++] = 0f;
 
                         //Texture coordinates
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.125f;
+                        Vector2[] atlasWallCoords = Texture.getAtlasTexCoordinates(1, 0, 2);
+                        texCoord[textIdx++] = atlasWallCoords[0].x;
+                        texCoord[textIdx++] = atlasWallCoords[0].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.125f;
+                        texCoord[textIdx++] = atlasWallCoords[1].x;
+                        texCoord[textIdx++] = atlasWallCoords[1].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[2].x;
+                        texCoord[textIdx++] = atlasWallCoords[2].y;
 
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[3].x;
+                        texCoord[textIdx++] = atlasWallCoords[3].y;
 
                         //Triangles
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -336,7 +337,7 @@ public class Map extends Object3D
                     }
                     if (j > 0 && map[i][j - 1] < 2)
                     {
-                       
+
                         //Vertices
                         vertices[vertextIdx++] = position.x + j;
                         vertices[vertextIdx++] = position.y - i;
@@ -372,17 +373,18 @@ public class Map extends Object3D
                         normals[normIdx++] = 0f;
 
                         //Texture coordinates
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.125f;
+                        Vector2[] atlasWallCoords = Texture.getAtlasTexCoordinates(1, 0, 2);
+                        texCoord[textIdx++] = atlasWallCoords[0].x;
+                        texCoord[textIdx++] = atlasWallCoords[0].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.125f;
+                        texCoord[textIdx++] = atlasWallCoords[1].x;
+                        texCoord[textIdx++] = atlasWallCoords[1].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[2].x;
+                        texCoord[textIdx++] = atlasWallCoords[2].y;
 
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[3].x;
+                        texCoord[textIdx++] = atlasWallCoords[3].y;
 
                         //Triangles
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -391,7 +393,7 @@ public class Map extends Object3D
 
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 3);
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 2);
-                        indices[indiceIdx++] = (short) (vertextIdx / 3 - 1); 
+                        indices[indiceIdx++] = (short) (vertextIdx / 3 - 1);
                     }
                     if (i < map.length - 1 && map[i + 1][j] < 2)
                     {
@@ -430,17 +432,18 @@ public class Map extends Object3D
                         normals[normIdx++] = 0f;
 
                         //Texture coordinates
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.125f;
+                        Vector2[] atlasWallCoords = Texture.getAtlasTexCoordinates(1, 0, 2);
+                        texCoord[textIdx++] = atlasWallCoords[0].x;
+                        texCoord[textIdx++] = atlasWallCoords[0].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.125f;
+                        texCoord[textIdx++] = atlasWallCoords[1].x;
+                        texCoord[textIdx++] = atlasWallCoords[1].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[2].x;
+                        texCoord[textIdx++] = atlasWallCoords[2].y;
 
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[3].x;
+                        texCoord[textIdx++] = atlasWallCoords[3].y;
 
                         //Triangles
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -449,7 +452,7 @@ public class Map extends Object3D
 
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 3);
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 2);
-                        indices[indiceIdx++] = (short) (vertextIdx / 3 - 1);                       
+                        indices[indiceIdx++] = (short) (vertextIdx / 3 - 1);
                     }
                     if (j < map[0].length - 1 && map[i][j + 1] < 2)
                     {
@@ -488,17 +491,18 @@ public class Map extends Object3D
                         normals[normIdx++] = 0f;
 
                         //Texture coordinates
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.125f;
+                        Vector2[] atlasWallCoords = Texture.getAtlasTexCoordinates(1, 0, 2);
+                        texCoord[textIdx++] = atlasWallCoords[0].x;
+                        texCoord[textIdx++] = atlasWallCoords[0].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.125f;
+                        texCoord[textIdx++] = atlasWallCoords[1].x;
+                        texCoord[textIdx++] = atlasWallCoords[1].y;
 
-                        texCoord[textIdx++] = 0.875f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[2].x;
+                        texCoord[textIdx++] = atlasWallCoords[2].y;
 
-                        texCoord[textIdx++] = 0.625f;
-                        texCoord[textIdx++] = 0.375f;
+                        texCoord[textIdx++] = atlasWallCoords[3].x;
+                        texCoord[textIdx++] = atlasWallCoords[3].y;
 
                         //Triangles
                         indices[indiceIdx++] = (short) (vertextIdx / 3 - 4);
@@ -512,14 +516,14 @@ public class Map extends Object3D
                 }
             }
         }
-        
+
         //Vertices
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         vertexBuffer = byteBuf.asFloatBuffer();
         vertexBuffer.put(vertices);
         vertexBuffer.position(0);
-        
+
         int[] buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         vbo = buffer[0];
@@ -532,7 +536,7 @@ public class Map extends Object3D
         textureBuffer = byteBuf.asFloatBuffer();
         textureBuffer.put(texCoord);
         textureBuffer.position(0);
-        
+
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         tbo = buffer[0];
@@ -545,7 +549,7 @@ public class Map extends Object3D
         normalBuffer = byteBuf.asFloatBuffer();
         normalBuffer.put(normals);
         normalBuffer.position(0);
-        
+
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         nbo = buffer[0];
@@ -557,14 +561,14 @@ public class Map extends Object3D
         indexBuffer = byteBuf.asShortBuffer();
         indexBuffer.put(indices);
         indexBuffer.position(0);
-        
+
         //Indices
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         ibo = buffer[0];
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, ibo);
         gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indices.length * 2, indexBuffer, GL11.GL_STATIC_DRAW);
-        
+
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
@@ -593,17 +597,17 @@ public class Map extends Object3D
 
     @Override
     public void render(GL11 gl, Vector3 camPosition)
-    {       
+    {
         gl.glPushMatrix();
-        
+
         gl.glLoadIdentity();
         gl.glTranslatef(camPosition.x, camPosition.y, camPosition.z);
-        
+
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         gl.glEnable(GL10.GL_ALPHA_TEST);
         gl.glAlphaFunc(GL10.GL_GREATER, 0.2f);
-        
+
         gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.texPointer);
         gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         gl.glEnable(GL10.GL_CULL_FACE);
@@ -629,21 +633,25 @@ public class Map extends Object3D
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-        
+
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
-        
+
         gl.glDisable(GL10.GL_BLEND);
         gl.glDisable(GL10.GL_ALPHA_TEST);
-        
+
         gl.glPopMatrix();
     }
-    
+
     private Vector2 getCollisionCourse(Rect ball, Rect wall)
     {
         Rect intersect = new Rect(Math.max(ball.left, wall.left), Math.max(ball.top, wall.top), Math.min(ball.right, wall.right), Math.min(ball.bottom, wall.bottom));
         Vector2 collision = new Vector2(0, 0);
+        if (intersect.height() < 10 && intersect.width() < 10)
+        {
+            return collision;
+        }
         if (intersect.height() > intersect.width())
         {
             collision.x = intersect.width();
@@ -691,7 +699,10 @@ public class Map extends Object3D
     public void destroy(GL11 gl)
     {
         texture.destroy(gl);
-        int[] buffers = new int[]{vbo, tbo, nbo, ibo};
+        int[] buffers = new int[]
+        {
+            vbo, tbo, nbo, ibo
+        };
         gl.glDeleteBuffers(4, buffers, 0);
     }
 }
