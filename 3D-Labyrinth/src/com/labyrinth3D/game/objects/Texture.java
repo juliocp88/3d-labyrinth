@@ -3,6 +3,7 @@ package com.labyrinth3D.game.objects;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.opengl.GLUtils;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +75,22 @@ public class Texture
             height = height / 2;
             width = width / 2;
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+            for (int i = 0; i < scaledBitmap.getHeight(); i++)
+            {
+                for (int j = 0; j < scaledBitmap.getWidth(); j++)
+                {
+                    int c00 = bitmap.getPixel(j * 2, i * 2);
+                    int c01 = bitmap.getPixel(j * 2 + 1, i * 2);
+                    int c10 = bitmap.getPixel(j * 2, i * 2 + 1);
+                    int c11 = bitmap.getPixel(j * 2 + 1, i * 2 + 1);
+                    
+                    int red = (Color.red(c00) + Color.red(c01) + Color.red(c10) + Color.red(c11)) / 4;
+                    int green = (Color.green(c00) + Color.green(c01) + Color.green(c10) + Color.green(c11)) / 4;
+                    int blue = (Color.blue(c00) + Color.blue(c01) + Color.blue(c10) + Color.blue(c11)) / 4;
+                    
+                    scaledBitmap.setPixel(j, i, Color.rgb(red, green, blue));
+                }
+            }
             bitmap.recycle();
             bitmap = scaledBitmap;
         }
