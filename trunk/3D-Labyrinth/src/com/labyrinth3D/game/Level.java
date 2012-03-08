@@ -30,7 +30,7 @@ public class Level
     
     public void load(String name, GL10 gl)
     {
-        //TEST        
+        //TEST
         Texture tex = new Texture(gl, context, R.drawable.map_atlas);
         
         int[][] mapAray = new int[][]
