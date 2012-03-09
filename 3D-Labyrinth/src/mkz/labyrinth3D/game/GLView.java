@@ -190,9 +190,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
                 {
                     accelerometerManager.startRunning(this);
                 }
-
             }
-
         }
         return true;
     }
