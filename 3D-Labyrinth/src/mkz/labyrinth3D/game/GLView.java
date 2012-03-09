@@ -17,7 +17,6 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, AccelerometerListener
 {
-
     private AccelerometerManager accelerometerManager;
     private Game curGame;
     private Context context;
@@ -141,7 +140,6 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
     {
         this.queueEvent(new Runnable()
         {
-
             @Override
             public void run()
             {
