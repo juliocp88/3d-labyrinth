@@ -5,7 +5,9 @@
 package mkz.labyrinth3D;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 /**
  *
@@ -13,15 +15,11 @@ import android.os.Bundle;
  */
 public class MainMenuActivity extends Activity
 {
-    public MainMenuActivity()
-    {
-        
-    }
-    
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
     }
 
     @Override
@@ -42,4 +40,9 @@ public class MainMenuActivity extends Activity
         super.onDestroy();
     }
     
+    public void testLaunch(View v)
+    {
+        Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
+		startActivityForResult(i, 0x1234);
+    }
 }
