@@ -4,7 +4,7 @@ import mkz.labyrinth3D.game.GLView;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class Main extends Activity
+public class GameActivity extends Activity
 {    
     private GLView gLView;
     
