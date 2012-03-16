@@ -37,11 +37,6 @@ public class Ball extends Object3D
     private Vector2 velocity;   
     private Vector2 rotation;
     
-    private int vbo;
-    private int nbo;
-    private int tbo;
-    private int ibo;
-    
     float test;
 
     public Ball(float radius, int slices, int stacks, GL11 gl, Texture texture)
@@ -62,7 +57,11 @@ public class Ball extends Object3D
         rotation = new Vector2(0, 0);
         int sizeCentimeters = (int) (BALL_RADIUS * 100);
         
-        boundingBox = new Rect(-sizeCentimeters, -sizeCentimeters, sizeCentimeters, sizeCentimeters);
+        boundingBox = new Rect();
+        boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
+        boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
+        boundingBox.right = (int) (-position.x * 100 + sizeCentimeters);
+        boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
 
     private void createSphere(GL11 gl)

@@ -12,13 +12,13 @@ public class ObjectRenderer
 {
     public static final int MAX_OBJECTS = 500;
     
-    private Object3D[] objects;
+    private Renderable[] objects;
     private int[] indexes;
     private int objectCount;
 
     public ObjectRenderer(int maxObjects)
     {
-        objects = new Object3D[maxObjects];
+        objects = new Renderable[maxObjects];
         indexes = new int[maxObjects];
         objectCount = 0;
         for (int i = 0; i < maxObjects; i++)
@@ -27,7 +27,7 @@ public class ObjectRenderer
         }
     }
 
-    public int addObject(Object3D addedObject)
+    public int addObject(Renderable addedObject)
     {
         if (objectCount >= objects.length)
         {

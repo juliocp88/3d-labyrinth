@@ -53,6 +53,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
 
     public void onSurfaceCreated(GL10 gl, EGLConfig cfg)
     {
+        gl11 = (GL11) gl;
         //Settings
         gl.glDisable(GL10.GL_DITHER);				//Disable dithering
         gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
@@ -65,13 +66,11 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         //Really Nice Perspective Calculations
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
-        curGame.loadResource(gl);
+        curGame.loadResource(gl11);
         if (AccelerometerManager.isSupported(context))
         {
             //accelerometerManager.startRunning(this);
         }
-
-        gl11 = (GL11) gl;
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height)
@@ -118,7 +117,8 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         {
             acceleration.y -= 0.01f;
         }
-
+        
+        curGame.update(cycleTime);
         curGame.moveBall(acceleration, cycleTime);
 
         camera.x = curGame.getBall().position().x;

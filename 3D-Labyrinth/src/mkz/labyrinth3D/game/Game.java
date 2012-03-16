@@ -27,24 +27,30 @@ public class Game
         renderer = new ObjectRenderer(ObjectRenderer.MAX_OBJECTS);
     }
     
-    public  void loadResource(GL10 gl)
+    public  void loadResource(GL11 gl)
     {
         currentLVL.load("test", gl);
         Texture tex = new Texture(gl, context, R.drawable.chess);
         ball = new Ball(1, 17, 11, (GL11) gl, tex);
-        renderer.addObject(currentLVL.map);
+        renderer.addObject(currentLVL.getMap());
+        renderer.addObject(currentLVL.getItemSet());
         renderer.addObject(ball);
     }
     
     public void moveBall(Vector3 acceleration, long time)
     {
         ball.move(acceleration, time);
-        currentLVL.map.colidesWith(ball);
+        currentLVL.getMap().colidesWith(ball);
     }
     
     public void render(GL10 gl, Vector3 camPosition)
     {
         renderer.render(gl, camPosition);
+    }
+    
+    public void update(long time)
+    {
+        renderer.update(time);
     }
 
     public Ball getBall()

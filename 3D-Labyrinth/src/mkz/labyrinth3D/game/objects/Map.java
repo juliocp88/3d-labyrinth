@@ -18,23 +18,35 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Map extends Object3D
 {
-    private int[][] map;
     private int verticesCount;
     private int triangleCount;
-    private int vbo;
-    private int nbo;
-    private int tbo;
-    private int ibo;
     private Rect[] wallBoundingBoxes;
+    private int[][] map;
 
-    public Map(int[][] map, Texture texture, GL11 gl)
+    public Map(int[][] mapArray, Texture texture, GL11 gl)
     {
-        this.map = map;
+        this.map = new int[mapArray.length][mapArray[0].length];
         this.texture = texture;
         verticesCount = 0;
         triangleCount = 0;
         int wallCount = 0;
 
+        //Creates local copy without special tiles
+        for (int i = 0; i < mapArray.length; i++)
+        {
+            for (int j = 0; j < mapArray[0].length; j++)
+            {
+                if (mapArray[i][j] > 2)
+                {
+                    map[i][j] = 1;
+                }
+                else
+                {
+                    map[i][j] = mapArray[i][j];
+                }
+            }
+        }
+        
         //Counts triangles and vertex count
         for (int i = 0; i < map.length; i++)
         {
