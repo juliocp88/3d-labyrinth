@@ -33,7 +33,7 @@ public class ItemSet implements Renderable
             {
                 if (mapArray[i][j] == 3)
                 {
-                    Vector3 position = new Vector3(j + 0.5f, i + 0.5f, 0.5f);
+                    Vector3 position = new Vector3(j + 0.5f, i + 0.5f, 0.36f);
                     items.add(new Item(position));
                 }
             }
@@ -56,6 +56,10 @@ public class ItemSet implements Renderable
 
     public void render(GL11 gl, Vector3 camPosition)
     {
+        if (Item.getGem() == null)
+        {
+            return;
+        }
         Item.bindBuffers(gl);
         for (Item item : items)
         {

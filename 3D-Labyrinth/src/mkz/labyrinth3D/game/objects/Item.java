@@ -28,6 +28,7 @@ public class Item
         boundingBox.top = (int) (position.y * 100 - SIZE / 2);
         boundingBox.right = (int) (position.x * 100 - SIZE / 2);
         boundingBox.bottom = (int) (position.y * 100 - SIZE / 2);
+        rotation = (float) (Math.random() * 360);
     }
 
     public static void createGemVBO(GL11 gl, Texture texture)
@@ -44,7 +45,7 @@ public class Item
     {
         gl.glBindTexture(GL10.GL_TEXTURE_2D, gem.texture.texPointer);
         gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-        //gl.glEnable(GL10.GL_CULL_FACE);
+        gl.glDisable(GL10.GL_CULL_FACE);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -64,8 +65,6 @@ public class Item
 
     public static void cleanBuffers(GL11 gl)
     {
-        gl.glDisable(GL10.GL_CULL_FACE);
-
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
@@ -80,9 +79,10 @@ public class Item
         gl.glPushMatrix();
 
         gl.glLoadIdentity();
-        gl.glTranslatef(camPosition.x  + position.x, camPosition.y - position.y, camPosition.z + position.z + height);
-        gl.glRotatef(90, 1, 0, 0);
-        gl.glRotatef(rotation, 0, 1, 0);
+        gl.glTranslatef(camPosition.x + position.x, camPosition.y - position.y, camPosition.z + position.z + height);
+        gl.glRotatef(80, 1, 0, 0);
+        gl.glRotatef(rotation, 0, 0.98f, 0.17f);
+        gl.glRotatef(rotation * -2.0f, 0, 1, 0);
 
         gl.glDrawElements(GL10.GL_TRIANGLES, gem.indexBuffer.capacity(), GL10.GL_UNSIGNED_SHORT, 0);
 
@@ -103,6 +103,7 @@ public class Item
     {
         float timeF = time / 1000f;
         rotation += 30 * timeF;
+        rotation = rotation % 360;
         height = (float) Math.sin(rotation / 14f) * 0.06f;
     }
 
@@ -114,6 +115,11 @@ public class Item
     public void setDisplayed(boolean displayed)
     {
         collected = !displayed;
+    }
+
+    public static Ball getGem()
+    {
+        return gem;
     }
 
     public void destroy(GL11 gl)

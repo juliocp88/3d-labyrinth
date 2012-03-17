@@ -284,7 +284,6 @@ public class Ball extends Object3D
         
         gl.glLoadIdentity();
         gl.glTranslatef(0, 0, camPosition.z + BALL_RADIUS);
-        gl.glScalef(BALL_RADIUS, BALL_RADIUS, BALL_RADIUS); 
         
         rotation.x -= velocity.y / BALL_RADIUS * 57.3f;
         rotation.y -= velocity.x / BALL_RADIUS * 57.3f;

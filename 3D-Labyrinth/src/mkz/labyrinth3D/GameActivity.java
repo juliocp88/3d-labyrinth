@@ -2,7 +2,10 @@ package mkz.labyrinth3D;
 
 import mkz.labyrinth3D.game.GLView;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class GameActivity extends Activity
 {    
@@ -18,7 +21,14 @@ public class GameActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         gLView = new GLView(this);
-        setContentView(gLView);
+        FrameLayout fl = new FrameLayout(this);
+        fl.addView(gLView);
+        TextView tw = new TextView(this);
+        tw.setText("Text");
+        //tw.setBackgroundColor(Color.argb(127, 0, 0, 0));
+        tw.setTextColor(Color.RED);
+        fl.addView(tw);
+        setContentView(fl);
     }
 
     @Override
