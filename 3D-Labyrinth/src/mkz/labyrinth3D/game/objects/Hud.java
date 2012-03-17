@@ -25,6 +25,7 @@ public class Hud extends RelativeLayout
         fpsTW.setTypeface(Typeface.MONOSPACE);
         fpsTW.setBackgroundColor(Color.argb(88, 0, 0, 0));
         fpsTW.setTextColor(Color.CYAN);
+        fpsTW.setTextSize(20.0f);
         this.addView(fpsTW);
     }
     
@@ -32,23 +33,15 @@ public class Hud extends RelativeLayout
     {
         if (fps < 0)
         {
-            fpsTW.setText("FPS: ER");
+            fpsTW.setText("ERROR");
         }
         else if (fps < 10)
         {
             fpsTW.setText("FPS: 0" + fps);
         }
-        else if(fps < 100)
-        {
-            fpsTW.setText("FPS: " + fps);
-        }
-        else if(fps < 1000)
-        {
-            fpsTW.setText("FPS:" + fps);
-        }
         else
         {
-            fpsTW.setText("FPS:999");
+            fpsTW.setText("FPS: " + fps);
         }
     }
 }

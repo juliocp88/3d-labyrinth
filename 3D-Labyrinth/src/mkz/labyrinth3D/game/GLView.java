@@ -1,9 +1,12 @@
 package mkz.labyrinth3D.game;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import mkz.labyrinth3D.AccelerometerListener;
 import mkz.labyrinth3D.AccelerometerManager;
 import mkz.labyrinth3D.math.Vector3;
@@ -11,6 +14,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 import mkz.labyrinth3D.GameActivity;
+import mkz.labyrinth3D.R;
 
 /**
  *
@@ -30,6 +34,8 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
     private GameActivity gameActivity;
     private int fpsCounter;
     private float fpsBuffer;
+    private boolean pause;
+    private AlertDialog alertDialog;
 
     public GLView(Context context)
     {
@@ -53,6 +59,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         }
         oldRenderTime = System.currentTimeMillis();
         oldCycleTime = System.currentTimeMillis();
+        pause = false;
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig cfg)
@@ -97,25 +104,30 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
 
     public void onDrawFrame(GL10 gl)
     {
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glEnable(GL10.GL_DEPTH_TEST);
+        gl.glLoadIdentity();
+        
         long cycleTime = System.currentTimeMillis() - oldCycleTime;
         oldCycleTime = System.currentTimeMillis();
-        
+        game.render(gl, camera);
+
         fpsBuffer += cycleTime;
         fpsCounter++;
-        
+
         if (fpsBuffer > 100)
         {
             int fps = (int) (1000f / (fpsBuffer / fpsCounter));
             fpsBuffer = 0;
             fpsCounter = 0;
             gameActivity.setFPS(fps);
-            
+
         }
-
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-        gl.glLoadIdentity();
-
+        
+        if (pause)
+        {
+            return;
+        }
         //Keys
         if (arows[0] == true)
         {
@@ -133,7 +145,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         {
             acceleration.y -= 0.01f;
         }
-        
+
         game.update(cycleTime);
         game.moveBall(acceleration, cycleTime);
 
@@ -141,7 +153,6 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         camera.y = game.getBall().position().y;
 
         oldRenderTime = System.currentTimeMillis();
-        game.render(gl, camera);
         long renderTime = System.currentTimeMillis() - oldRenderTime;
     }
 
@@ -188,11 +199,9 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         {
             arows[3] = true;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK)
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)
         {
-            destroy();
-            System.gc();
-            System.exit(0);
+            pause();
         }
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
         {
@@ -209,6 +218,45 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
             }
         }
         return true;
+    }
+
+    public void pause()
+    {
+        pause = true;
+        alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setButton(AlertDialog.BUTTON1, gameActivity.getString(R.string.resume_btn), new android.content.DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface arg0, int arg1)
+            {
+                unPause();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON2, gameActivity.getString(R.string.mainmenu_btn), new android.content.DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface arg0, int arg1)
+            {
+                destroy();
+                System.gc();
+                System.exit(0);
+            }
+        });
+        alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener()
+        {
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent keyEvent)
+            {
+                return true;
+            }
+        });
+        alertDialog.setTitle(R.string.ingamemenu_title);
+        alertDialog.setMessage(gameActivity.getString(R.string.ingamemenu_message));
+        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.show();
+    }
+
+    public void unPause()
+    {
+        alertDialog.dismiss();
+        pause = false;
     }
 
     @Override
@@ -230,6 +278,25 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT)
         {
             arows[3] = false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        super.onTouchEvent(event);
+        if (AccelerometerManager.isSupported(context))
+        {
+            if (accelerometerManager.isRunning())
+            {
+                accelerometerManager.stopRunning();
+            }
+            else
+            {
+                accelerometerManager.startRunning(this);
+            }
         }
 
         return true;
