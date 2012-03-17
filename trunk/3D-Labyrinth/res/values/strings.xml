@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">3D Labyrinth</string>
+    
+    <string name="resume_btn">Resume</string>
+    <string name="mainmenu_btn">Main menu</string>
+    <string name="ingamemenu_title">Paused</string>
+    <string name="ingamemenu_message">Returning to menu cancels your current progress.</string>
 </resources>
