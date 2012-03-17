@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import mkz.labyrinth3D.game.objects.Hud;
 
 public class GameActivity extends Activity
 {    
     private GLView gLView;
+    private Hud hud;
     
     /**
      * Creates new activity
@@ -21,13 +23,11 @@ public class GameActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         gLView = new GLView(this);
+        hud = new Hud(this);
         FrameLayout fl = new FrameLayout(this);
-        fl.addView(gLView);
-        TextView tw = new TextView(this);
-        tw.setText("Text");
-        //tw.setBackgroundColor(Color.argb(127, 0, 0, 0));
-        tw.setTextColor(Color.RED);
-        fl.addView(tw);
+        fl.addView(gLView);       
+        fl.addView(hud);
+        gLView.setGameActivity(this);
         setContentView(fl);
     }
 
@@ -52,4 +52,14 @@ public class GameActivity extends Activity
         gLView.destroy();
     }
     
+    public void setFPS(final int fps)
+    {
+        runOnUiThread(new Runnable() 
+        {
+            public void run()
+            {
+                hud.setFPS(fps);
+            }
+        });
+    }
 }
