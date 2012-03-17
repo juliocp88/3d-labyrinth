@@ -10,6 +10,7 @@ import mkz.labyrinth3D.math.Vector3;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
+import mkz.labyrinth3D.GameActivity;
 
 /**
  *
@@ -18,7 +19,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, AccelerometerListener
 {
     private AccelerometerManager accelerometerManager;
-    private Game curGame;
+    private Game game;
     private Context context;
     private Vector3 acceleration;
     private Vector3 camera;
@@ -26,6 +27,9 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
     private long oldRenderTime;
     private long oldCycleTime;
     private GL11 gl11;
+    private GameActivity gameActivity;
+    private int fpsCounter;
+    private float fpsBuffer;
 
     public GLView(Context context)
     {
@@ -40,7 +44,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
             false, false, false, false
         };
 
-        curGame = new Game(context);
+        game = new Game(context);
         acceleration = new Vector3();
 
         if (AccelerometerManager.isSupported(context))
@@ -66,7 +70,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         //Really Nice Perspective Calculations
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
-        curGame.loadResource(gl11);
+        game.loadResource(gl11);
         if (AccelerometerManager.isSupported(context))
         {
             //accelerometerManager.startRunning(this);
@@ -95,6 +99,18 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
     {
         long cycleTime = System.currentTimeMillis() - oldCycleTime;
         oldCycleTime = System.currentTimeMillis();
+        
+        fpsBuffer += cycleTime;
+        fpsCounter++;
+        
+        if (fpsBuffer > 100)
+        {
+            int fps = (int) (1000f / (fpsBuffer / fpsCounter));
+            fpsBuffer = 0;
+            fpsCounter = 0;
+            gameActivity.setFPS(fps);
+            
+        }
 
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         gl.glEnable(GL10.GL_DEPTH_TEST);
@@ -118,14 +134,14 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
             acceleration.y -= 0.01f;
         }
         
-        curGame.update(cycleTime);
-        curGame.moveBall(acceleration, cycleTime);
+        game.update(cycleTime);
+        game.moveBall(acceleration, cycleTime);
 
-        camera.x = curGame.getBall().position().x;
-        camera.y = curGame.getBall().position().y;
+        camera.x = game.getBall().position().x;
+        camera.y = game.getBall().position().y;
 
         oldRenderTime = System.currentTimeMillis();
-        curGame.render(gl, camera);
+        game.render(gl, camera);
         long renderTime = System.currentTimeMillis() - oldRenderTime;
     }
 
@@ -143,7 +159,7 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
             @Override
             public void run()
             {
-                curGame.destroy(gl11);
+                game.destroy(gl11);
             }
         });
         if (AccelerometerManager.isSupported(context))
@@ -217,5 +233,10 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, Acc
         }
 
         return true;
+    }
+
+    public void setGameActivity(GameActivity gameActivity)
+    {
+        this.gameActivity = gameActivity;
     }
 }
