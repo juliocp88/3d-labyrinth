@@ -31,7 +31,7 @@ public class Game
     {
         currentLVL.load("test", gl);
         Texture tex = new Texture(gl, context, R.drawable.chess);
-        ball = new Ball(1, 17, 11, (GL11) gl, tex);
+        ball = new Ball(Ball.BALL_RADIUS, 17, 11, (GL11) gl, tex);
         renderer.addObject(currentLVL.getMap());
         renderer.addObject(currentLVL.getItemSet());
         renderer.addObject(ball);
