@@ -43,6 +43,9 @@ public class Game
         currentLVL.load("test", gl);
         Texture tex = new Texture(gl, context, R.drawable.ball);
         ball = new Ball(Ball.BALL_RADIUS, 17, 11, (GL11) gl, tex);
+        ball.position().x = currentLVL.getBallPosition().x;
+        ball.position().y = currentLVL.getBallPosition().y;
+        ball.position().z = currentLVL.getBallPosition().z;
         renderer.addObject(currentLVL.getMap());
         renderer.addObject(currentLVL.getItemSet());
         renderer.addObject(ball);
