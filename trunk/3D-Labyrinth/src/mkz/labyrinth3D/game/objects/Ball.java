@@ -22,9 +22,15 @@ public class Ball extends Object3D
     public static final float MAX_VELOCITY = 6f;
     /**Weight in kilograms*/
     public static final float BALL_MASS = 350.0f;
-    
     public Rect boundingBox;
-    
+    private float[] sunDifuse = new float[]
+    {
+        1f, 1f, 0.6f, 1
+    };
+    private float[] sunAmbient = new float[]
+    {
+        0.0f, 0.0f, 0.0f, 1
+    };
     private float radius;
     private int slices;
     private int stacks;
@@ -32,11 +38,9 @@ public class Ball extends Object3D
     private FloatBuffer[] normalsBuffers;
     private FloatBuffer[] texCoordsBuffers;
     private ShortBuffer[] indicesBuffers;
-    
     private Vector3 position;
-    private Vector2 velocity;   
+    private Vector2 velocity;
     private Vector2 rotation;
-    
     float test;
 
     public Ball(float radius, int slices, int stacks, GL11 gl, Texture texture)
@@ -46,17 +50,17 @@ public class Ball extends Object3D
         this.slices = slices;
         createSphere(gl);
         this.texture = texture;
-        
+
         slicesBuffers = null;
         normalsBuffers = null;
         texCoordsBuffers = null;
         indicesBuffers = null;
-        
-        position = new Vector3(-(float)Math.PI, (float)Math.PI, 0);
+
+        position = new Vector3(-(float) Math.PI, (float) Math.PI, 1);
         velocity = new Vector2(0, 0);
         rotation = new Vector2(0, 0);
         int sizeCentimeters = (int) (BALL_RADIUS * 100);
-        
+
         boundingBox = new Rect();
         boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
         boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
@@ -92,11 +96,11 @@ public class Ball extends Object3D
 
                 float cosBeta = (float) Math.cos(beta);
                 float sinBeta = (float) Math.sin(beta);
-                
+
                 vertexCoords[6 * j] = radius * cosBeta * cosAlpha1;
                 vertexCoords[6 * j + 1] = radius * sinBeta;
                 vertexCoords[6 * j + 2] = radius * cosBeta * sinAlpha1;
-                
+
                 vertexCoords[6 * j + 3] = radius * cosBeta * cosAlpha0;
                 vertexCoords[6 * j + 3 + 1] = radius * sinBeta;
                 vertexCoords[6 * j + 3 + 2] = radius * cosBeta * sinAlpha0;
@@ -104,23 +108,23 @@ public class Ball extends Object3D
                 normalCoords[6 * j] = cosBeta * cosAlpha1;
                 normalCoords[6 * j + 1] = sinBeta;
                 normalCoords[6 * j + 2] = cosBeta * sinAlpha1;
-                
+
                 normalCoords[6 * j + 3] = cosBeta * cosAlpha0;
                 normalCoords[6 * j + 3 + 1] = sinBeta;
                 normalCoords[6 * j + 3 + 2] = cosBeta * sinAlpha0;
-                
+
                 textureCoords[4 * j] = ((float) (i + 1)) / slices;
                 textureCoords[4 * j + 1] = ((float) j) / stacks;
 
                 textureCoords[4 * j + 2] = ((float) i) / slices;
                 textureCoords[4 * j + 2 + 1] = ((float) j) / stacks;
-                
+
                 if (j != stacks)
                 {
                     indicesCoords[6 * j + 0] = (short) (i * 2 * (stacks + 1) + 2 * j + 0);
                     indicesCoords[6 * j + 1] = (short) (i * 2 * (stacks + 1) + 2 * j + 1);
                     indicesCoords[6 * j + 2] = (short) (i * 2 * (stacks + 1) + 2 * j + 2);
-                    
+
                     indicesCoords[6 * j + 3] = (short) (i * 2 * (stacks + 1) + 2 * j + 1);
                     indicesCoords[6 * j + 4] = (short) (i * 2 * (stacks + 1) + 2 * j + 3);
                     indicesCoords[6 * j + 5] = (short) (i * 2 * (stacks + 1) + 2 * j + 2);
@@ -142,7 +146,7 @@ public class Ball extends Object3D
             vertexBuffer.put(slicesBuffers[i]);
         }
         vertexBuffer.position(0);
-        
+
         int[] buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         vbo = buffer[0];
@@ -158,8 +162,8 @@ public class Ball extends Object3D
             textureBuffer.position(texCoordsBuffers[i].capacity() * i);
             textureBuffer.put(texCoordsBuffers[i]);
         }
-        textureBuffer.position(0);        
-        
+        textureBuffer.position(0);
+
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         tbo = buffer[0];
@@ -176,7 +180,7 @@ public class Ball extends Object3D
             normalBuffer.put(normalsBuffers[i]);
         }
         normalBuffer.position(0);
-        
+
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         nbo = buffer[0];
@@ -190,80 +194,86 @@ public class Ball extends Object3D
         for (int i = 0; i < slices; i++)
         {
             indexBuffer.position(indicesBuffers[i].capacity() * i);
-            indexBuffer.put(indicesBuffers[i]);            
+            indexBuffer.put(indicesBuffers[i]);
         }
         indexBuffer.position(0);
-        
+
         buffer = new int[1];
         gl.glGenBuffers(1, buffer, 0);
         ibo = buffer[0];
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, ibo);
         gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, slices * indicesBuffers[0].capacity() * 2, indexBuffer, GL11.GL_STATIC_DRAW);
-        
+
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
-    
+
     public void move(Vector3 acceleration, long time)
     {
         float duration = ((float) time) / 1000.0f;
         float velocityLimit = MAX_VELOCITY * duration;
-        
-        Vector2 deaceleration = velocity.mul(8.5f);
+        float velocityDecrease = MAX_VELOCITY * duration * acceleration.xy().size();
+
+        Vector2 deaceleration = velocity.mul(velocity.size());
         velocity = velocity.add((acceleration.xy().sub(deaceleration)).mul(duration));
+        if (velocity.size() > velocityDecrease)
+        {
+            velocity = velocity.sub(velocity.mul(0.1f * (velocity.size() - velocityDecrease) / velocity.size()));
+        }
         if (velocity.size() > velocityLimit)
         {
             velocity.setSize(velocityLimit);
         }
-        
+
         position.x = position.x - (velocity.y);
         position.y = position.y + (velocity.x);
-        
+
         int sizeCentimeters = (int) (BALL_RADIUS * 100);
         boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
         boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
         boundingBox.right = (int) (-position.x * 100 + sizeCentimeters);
         boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
-    
+
     public void move(Vector3 newPosition, int axxis)
-    {       
+    {
         //rotation.x += (newPosition.x - position.x) / BALL_RADIUS * 57.3f;
         //rotation.y += (newPosition.y - position.y) / BALL_RADIUS * 57.3f;
-        
+
         if (axxis == 0)
         {
             velocity.x = 0;
         }
-        else if(axxis == 1)
+        else if (axxis == 1)
         {
             velocity.y = 0;
         }
-        
+
         position.x = newPosition.x;
         position.y = newPosition.y;
-        
+        position.z = newPosition.z;
+
         int sizeCentimeters = (int) (BALL_RADIUS * 100);
         boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
         boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
         boundingBox.right = (int) (-position.x * 100 + sizeCentimeters);
         boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
-    
+
     public void bounce(Vector2 normal)
     {
         //this.Velocity = velocity - (2 * (velocity * normal)) * normal;
         velocity = velocity.sub(normal.mul(velocity.dot(normal) * 2));
-        
+
         velocity.x = -velocity.x;
-        velocity.y = -velocity.y;    
-        
+        velocity.y = -velocity.y;
+
         rotation.x -= velocity.x / BALL_RADIUS * 57.3f;
         rotation.y -= velocity.y / BALL_RADIUS * 57.3f;
-        
+
         position.x = position.x - (velocity.y);
         position.y = position.y + (velocity.x);
-        
+
         int sizeCentimeters = (int) (BALL_RADIUS * 100);
         boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
         boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
@@ -279,20 +289,27 @@ public class Ball extends Object3D
 
     @Override
     public void render(GL11 gl, Vector3 camPosition)
-    {       
+    {
         gl.glPushMatrix();
-        
+
         gl.glLoadIdentity();
         gl.glTranslatef(0, 0, camPosition.z + BALL_RADIUS);
-        
+        gl.glScalef(position.z, position.z, position.z);
+
         rotation.x -= velocity.y / BALL_RADIUS * 57.3f;
         rotation.y -= velocity.x / BALL_RADIUS * 57.3f;
 
-        //gl.glRotatef(rotation.size(), rotation.y / rotation.size(), rotation.x / rotation.size(), 0);
-        
+        //gl.glRotatef(rotation.y, (float) Math.cos(rotation.x / 57.3f), 0, (float) Math.sin(rotation.x / 57.3f));
+        //gl.glRotatef(rotation.x, 0, 1, 0);
+
+        //Vector3 direction = new Vector3(velocity.x, velocity.y, 0).cross(new Vector3(0, 0, 1));
+        //direction = direction.unit();
+        //gl.glRotatef(rotation.size(), direction.x, direction.y, direction.z);
+
         gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.texPointer);
         gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         gl.glEnable(GL10.GL_CULL_FACE);
+        gl.glEnable(GL10.GL_COLOR_MATERIAL);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -305,21 +322,21 @@ public class Ball extends Object3D
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, tbo);
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, 0);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, nbo);
-        gl.glNormalPointer(GL10.GL_FLOAT, 0, 0);
+        gl.glNormalPointer(GL10.GL_FLOAT, 0, 0);       
 
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, ibo);
         gl.glDrawElements(GL10.GL_TRIANGLES, indexBuffer.capacity(), GL10.GL_UNSIGNED_SHORT, 0);
 
         gl.glDisable(GL10.GL_CULL_FACE);
-        
+
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-        
+
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
-        
+
         gl.glPopMatrix();
     }
 
@@ -339,7 +356,7 @@ public class Ball extends Object3D
     public void update(long time)
     {
         float duration = ((float) time) / 1000.0f;
-        
+
     }
 
     @Override
@@ -358,7 +375,10 @@ public class Ball extends Object3D
     public void destroy(GL11 gl)
     {
         texture.destroy(gl);
-        int[] buffers = new int[]{vbo, tbo, nbo, ibo};
+        int[] buffers = new int[]
+        {
+            vbo, tbo, nbo, ibo
+        };
         gl.glDeleteBuffers(4, buffers, 0);
     }
 }

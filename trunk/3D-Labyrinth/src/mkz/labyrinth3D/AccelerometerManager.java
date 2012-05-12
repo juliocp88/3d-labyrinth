@@ -30,7 +30,10 @@ public class AccelerometerManager
 
             public void onSensorChanged(SensorEvent arg0)
             {
-                listener.onAccelerationChanged(arg0.values[0], arg0.values[1], arg0.values[2]);
+                if (listener != null)
+                {
+                     listener.onAccelerationChanged(arg0.values[0], arg0.values[1], arg0.values[2]);
+                }
             }
         };
     }

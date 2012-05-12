@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">3D Labyrinth</string>
-    
+    <string name="launch_btn">Start demo</string>
     <string name="resume_btn">Resume</string>
     <string name="mainmenu_btn">Main menu</string>
     <string name="ingamemenu_title">Paused</string>
-    <string name="ingamemenu_message">Returning to menu cancels your current progress.</string>
+    <string name="ingamemenu_message">Returning to menu cancels your current progress.</string> 
+    <string name="win_title">Congratulations!</string>
+    <string name="win_message">You have won.</string>
+    <string name="lost_title">Game over!</string>
+    <string name="lost_message">You have fallen to the darkness.</string>
 </resources>
