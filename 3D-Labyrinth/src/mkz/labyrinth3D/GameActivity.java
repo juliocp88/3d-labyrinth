@@ -167,7 +167,6 @@ public class GameActivity extends Activity
     {
         super.onRestart();
         System.out.println("******************* ON RESTART");
-
     }
 
     @Override
