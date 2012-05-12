@@ -21,12 +21,22 @@ public class Hud extends RelativeLayout
         super(context);
         this.context = context;
         fpsTW = new TextView(context);
-        fpsTW.setText("FPS: 17");
+        fpsTW.setText("FPS: 00");
         fpsTW.setTypeface(Typeface.MONOSPACE);
         fpsTW.setBackgroundColor(Color.argb(88, 0, 0, 0));
         fpsTW.setTextColor(Color.CYAN);
         fpsTW.setTextSize(20.0f);
+        colectTW = new TextView(context);
+        colectTW.setText("GEMS: 00");
+        colectTW.setTypeface(Typeface.MONOSPACE);
+        colectTW.setBackgroundColor(Color.argb(88, 0, 0, 0));
+        colectTW.setTextColor(Color.CYAN);
+        colectTW.setTextSize(20.0f);    
         this.addView(fpsTW);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+        colectTW.setLayoutParams(params);
+        this.addView(colectTW);
     }
     
     public void setFPS(int fps)
@@ -42,6 +52,22 @@ public class Hud extends RelativeLayout
         else
         {
             fpsTW.setText("FPS: " + fps);
+        }
+    }
+    
+    public void setGEMS(int gems)
+    {
+        if (gems < 0)
+        {
+            colectTW.setText("ERROR");
+        }
+        else if (gems < 10)
+        {
+            colectTW.setText("GEMS: 0" + gems);
+        }
+        else
+        {
+            colectTW.setText("GEMS: " + gems);
         }
     }
 }

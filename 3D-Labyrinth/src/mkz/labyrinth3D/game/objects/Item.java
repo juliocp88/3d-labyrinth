@@ -26,8 +26,8 @@ public class Item
         boundingBox = new Rect();
         boundingBox.left = (int) (position.x * 100 - SIZE / 2);
         boundingBox.top = (int) (position.y * 100 - SIZE / 2);
-        boundingBox.right = (int) (position.x * 100 - SIZE / 2);
-        boundingBox.bottom = (int) (position.y * 100 - SIZE / 2);
+        boundingBox.right = (int) (position.x * 100 + SIZE / 2);
+        boundingBox.bottom = (int) (position.y * 100 + SIZE / 2);
         rotation = (float) (Math.random() * 360);
     }
 
@@ -102,9 +102,9 @@ public class Item
     public void update(long time)
     {
         float timeF = time / 1000f;
-        rotation += 30 * timeF;
+        rotation += 45 * timeF;
         rotation = rotation % 360;
-        height = (float) Math.sin(rotation / 14f) * 0.06f;
+        height = (float) Math.sin(rotation / 10f) * 0.06f;
     }
 
     public boolean displayed()

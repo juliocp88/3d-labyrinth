@@ -54,6 +54,18 @@ public class ItemSet implements Renderable
         return colision;
     }
 
+    public Item findColision(Ball ball)
+    {
+        for (Item item : items)
+        {
+            if (item.colidesWith(ball))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+    
     public void render(GL11 gl, Vector3 camPosition)
     {
         if (Item.getGem() == null)
@@ -110,5 +122,18 @@ public class ItemSet implements Renderable
     public List<Item> getItems()
     {
         return items;
+    }
+    
+    public int getRemaining()
+    {
+        int count = 0;
+        for (Item item : items)
+        {
+            if (item.displayed())
+            {
+                count++;
+            }
+        }
+        return count;
     }
 }

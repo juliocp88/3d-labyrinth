@@ -21,6 +21,7 @@ public class Map extends Object3D
     private int verticesCount;
     private int triangleCount;
     private Rect[] wallBoundingBoxes;
+    private Vector2[] holePositions;
     private int[][] map;
 
     public Map(int[][] mapArray, Texture texture, GL11 gl)
@@ -30,6 +31,7 @@ public class Map extends Object3D
         verticesCount = 0;
         triangleCount = 0;
         int wallCount = 0;
+        int holeCount = 0;
 
         //Creates local copy without special tiles
         for (int i = 0; i < mapArray.length; i++)
@@ -46,7 +48,7 @@ public class Map extends Object3D
                 }
             }
         }
-        
+
         //Counts triangles and vertex count
         for (int i = 0; i < map.length; i++)
         {
@@ -56,6 +58,10 @@ public class Map extends Object3D
                 {
                     verticesCount += 4;
                     triangleCount += 2;
+                    if (map[i][j] == 0)
+                    {
+                        holeCount++;
+                    }
                 }
                 else if (map[i][j] == 2)
                 {
@@ -93,12 +99,14 @@ public class Map extends Object3D
         texCoord = new float[2 * verticesCount];
         indices = new short[3 * triangleCount];
         wallBoundingBoxes = new Rect[wallCount];
+        holePositions = new Vector2[holeCount];
 
         int vertextIdx = 0;
         int textIdx = 0;
         int normIdx = 0;
         int indiceIdx = 0;
         wallCount = 0;
+        holeCount = 0;
 
         Vector3 position = new Vector3();
 
@@ -109,6 +117,9 @@ public class Map extends Object3D
             {
                 if (map[i][j] == 0) //HOLES
                 {
+                    //Positions
+                    holePositions[holeCount++] = new Vector2((position.x + j) + 0.5f, (int) (position.y + i) + 0.5f);
+
                     //Vertices
                     vertices[vertextIdx++] = position.x + j;
                     vertices[vertextIdx++] = position.y - i;
@@ -229,7 +240,6 @@ public class Map extends Object3D
                 {
                     //Bounding boxes
                     wallBoundingBoxes[wallCount++] = new Rect((int) (position.x + j) * 100, (int) (position.y + i) * 100, (int) (position.x + j) * 100 + 100, (int) (position.y + i) * 100 + 100);
-                    System.out.println("Bounding box: " + wallBoundingBoxes[wallCount - 1].toShortString());
 
                     //Vertices
                     vertices[vertextIdx++] = position.x + j;
@@ -675,6 +685,18 @@ public class Map extends Object3D
             collision = collision.mul(Math.signum(ball.centerY() - wall.centerY()));
         }
         return collision.mul(0.01f);
+    }
+
+    public Vector2 fallsInHole(Ball ball)
+    {
+        for (Vector2 hole : holePositions)
+        {
+            if (Vector2.vectorDistance(hole, new Vector2(-ball.position().x, ball.position().y)) < 0.5f)
+            {
+                return hole;
+            }
+        }
+        return null;
     }
 
     @Override
