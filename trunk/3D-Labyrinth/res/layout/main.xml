@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:onClick="testLaunch"
         android:text="@string/launch_btn"
-        android:textSize="30pt" />
+        android:textSize="50sp" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:onClick="left"
             android:text="@string/left"
-            android:textSize="30pt" />
+            android:textSize="100sp" />
 
         <TextView
             android:id="@+id/levelview"
@@ -32,9 +32,9 @@
             android:layout_weight="3.75"
             android:editable="false"
             android:gravity="center"
-            android:text="0"
+            android:text="1"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="30pt" />
+            android:textSize="80sp" />
 
         <Button
             android:id="@+id/btnright"
@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:onClick="right"
             android:text="@string/right"
-            android:textSize="30pt" />
+            android:textSize="100sp" />
 
     </LinearLayout>
 

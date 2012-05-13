@@ -48,7 +48,7 @@ public class MainMenuActivity extends Activity
             level = 0;
         }
         TextView levelView = (TextView) findViewById(R.id.levelview);
-        levelView.setText("" + level);
+        levelView.setText("" + (level + 1));
     }
     
     public void right(View v)
@@ -59,7 +59,7 @@ public class MainMenuActivity extends Activity
             level = LevelMaps.getLevelCount() - 1;
         }
         TextView levelView = (TextView) findViewById(R.id.levelview);
-        levelView.setText("" + level);
+        levelView.setText("" + (level + 1));
     }
     
     public void testLaunch(View v)
