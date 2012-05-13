@@ -266,6 +266,15 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
                 }
             }
         }
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+        {
+            camera.z -= camera.z * 0.1f;
+        }
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+        {
+            camera.z += camera.z * 0.1f;
+        }
+        
         return true;
     }
 
