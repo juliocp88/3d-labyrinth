@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">3D Labyrinth</string>
-    <string name="launch_btn">Start demo</string>
+    <string name="launch_btn">Start game</string>
+    <string name="left">&lt;</string>
+    <string name="right">&gt;</string>
     <string name="resume_btn">Resume</string>
     <string name="mainmenu_btn">Main menu</string>
     <string name="ingamemenu_title">Paused</string>

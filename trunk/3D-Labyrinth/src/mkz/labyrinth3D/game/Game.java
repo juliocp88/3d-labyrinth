@@ -27,6 +27,7 @@ public class Game
     private boolean dead;
     private long deadTime;
     private boolean gameOver;
+    private int levelID;
 
     public Game(Context context)
     {
@@ -36,11 +37,13 @@ public class Game
         dead = false;
         deadTime = 0;
         gameOver = false;
+        levelID = 0;
     }
 
     public void loadResource(GL11 gl)
     {
-        currentLVL.load("test", gl);
+        
+        currentLVL.load(levelID, gl);
         Texture tex = new Texture(gl, context, R.drawable.ball);
         ball = new Ball(Ball.BALL_RADIUS, 17, 11, (GL11) gl, tex);
         ball.position().x = currentLVL.getBallPosition().x;
@@ -136,5 +139,15 @@ public class Game
     public List<Item> getItems()
     {
         return currentLVL.getItemSet().getItems();
+    }
+
+    public int getLevelID()
+    {
+        return levelID;
+    }
+
+    public void setLevelID(int levelID)
+    {
+        this.levelID = levelID;
     }
 }

@@ -1,13 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    <Button android:id="@+id/testLaunchBTN"
-        android:onClick="testLaunch" 
-        android:text="@string/launch_btn" 
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content"/>
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/testLaunchBTN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="testLaunch"
+        android:text="@string/launch_btn"
+        android:textSize="30pt" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/btnleft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="left"
+            android:text="@string/left"
+            android:textSize="30pt" />
+
+        <TextView
+            android:id="@+id/levelview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.75"
+            android:editable="false"
+            android:gravity="center"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30pt" />
+
+        <Button
+            android:id="@+id/btnright"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="right"
+            android:text="@string/right"
+            android:textSize="30pt" />
+
+    </LinearLayout>
+
 </LinearLayout>
 
