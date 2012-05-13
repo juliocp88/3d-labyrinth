@@ -17,6 +17,7 @@ public class GameActivity extends Activity
     private FrameLayout frameLayout;
     private List<Boolean> colectedItems;
     private Vector3 ballPosition;
+    private int levelID;
 
     /**
      * Creates new activity
@@ -32,6 +33,15 @@ public class GameActivity extends Activity
         frameLayout = new FrameLayout(this);
         setContentView(frameLayout);
         colectedItems = new LinkedList<Boolean>();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("level"))
+        {
+            levelID = extras.getInt("level");
+        }
+        else
+        {
+            levelID = 0;
+        }
 
         if (savedInstanceState != null)
         {
@@ -47,6 +57,7 @@ public class GameActivity extends Activity
                     colectedItems.add(item);
                 }
             }
+
         }
     }
 
@@ -56,6 +67,7 @@ public class GameActivity extends Activity
         super.onResume();
         gLView = new GLView(this);
         gLView.setGameActivity(this);
+        gLView.getGame().setLevelID(levelID);
         frameLayout.addView(gLView);
         frameLayout.addView(hud);
         gLView.onResume();
@@ -98,6 +110,7 @@ public class GameActivity extends Activity
         gLView.onPause();
         System.out.println("******************* ON PAUSE");
         ballPosition = gLView.getGame().getBall().position();
+        levelID = gLView.getGame().getLevelID();
         colectedItems.clear();
         runOnUiThread(new Runnable()
         {
@@ -189,9 +202,17 @@ public class GameActivity extends Activity
                     colectedItems.add(item);
                 }
             }
+            if (savedInstanceState.containsKey("level"))
+            {
+                levelID = savedInstanceState.getInt("level");
+            }
+            else
+            {
+                levelID = 0;
+            }
         }
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
@@ -212,5 +233,6 @@ public class GameActivity extends Activity
             }
             outState.putBooleanArray("items", items);
         }
+        outState.putInt("level", levelID);
     }
 }
