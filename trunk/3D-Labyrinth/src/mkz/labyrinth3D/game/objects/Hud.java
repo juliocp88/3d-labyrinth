@@ -12,14 +12,12 @@ import android.widget.TextView;
  */
 public class Hud extends RelativeLayout
 {
-    private Context context;
     TextView fpsTW;
     TextView colectTW;
 
     public Hud(Context context)
     {
         super(context);
-        this.context = context;
         fpsTW = new TextView(context);
         fpsTW.setText("FPS: 00");
         fpsTW.setTypeface(Typeface.MONOSPACE);
