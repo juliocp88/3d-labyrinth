@@ -1,11 +1,18 @@
 package mkz.labyrinth3D.game;
 
 /**
- *
+ * Game levels.
+ * 0 - hole
+ * 1 - floor
+ * 2 - wall
+ * 3 - gem
+ * 4 - start
+ * 
  * @author Hans
  */
 public class LevelMaps
 {
+    /**Level 1*/
     private static final int[][] level1 = new int[][]
     {
         new int[]{2, 2, 2, 2, 2, 2, 2},
@@ -17,6 +24,7 @@ public class LevelMaps
         new int[]{2, 2, 2, 2, 2, 2, 2},
     };
     
+    /**Level 2*/
     private static final int[][] level2 = new int[][]
     {
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
@@ -30,6 +38,7 @@ public class LevelMaps
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
     };
     
+    /**Level 3*/
     private static final int[][] level3 = new int[][]
     {
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
@@ -54,6 +63,7 @@ public class LevelMaps
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
     };
     
+    /**Level 4*/
     private static final int[][] level4 = new int[][]
     {
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
@@ -78,11 +88,20 @@ public class LevelMaps
         new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
     };
     
+    /**
+     * Returns number of levels.
+     * @return number of levels
+     */
     public static int getLevelCount()
     {
         return 4;
     }
     
+    /**
+     * Returns level by ID
+     * @param idx   ID
+     * @return      level
+     */
     public static int[][] getLevel(int idx)
     {
         switch(idx)

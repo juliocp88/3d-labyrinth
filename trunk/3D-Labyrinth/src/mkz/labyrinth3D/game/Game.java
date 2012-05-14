@@ -13,22 +13,35 @@ import mkz.labyrinth3D.game.objects.Item;
 import mkz.labyrinth3D.math.Vector2;
 
 /**
- *
+ * Game class, contins curently played game.
  * @author Hans
  */
 public class Game
 {
+    /**Length of death animation in ms*/
     public static final long DEATH_ANIMATION_LENGTH = 1000;
     
+    /**Scene rendering object*/
     private ObjectRenderer renderer;
+    /**Curently played level*/
     private Level currentLVL;
+    /**Application context*/
     private Context context;
+    /**Player ball*/
     private Ball ball;
+    /**Set to true when user starts to fall in hole*/
     private boolean dead;
+    /**Time user is falling to hole*/
     private long deadTime;
+    /**Set true after death animation ends*/
     private boolean gameOver;
+    /**Played level ID*/
     private int levelID;
 
+    /**
+     * Creates new game.
+     * @param context application context
+     */
     public Game(Context context)
     {
         this.context = context;
@@ -40,6 +53,10 @@ public class Game
         levelID = 0;
     }
 
+    /**
+     * Loads resources for scener.
+     * @param gl OPENGL context
+     */
     public void loadResource(GL11 gl)
     {
         
@@ -54,6 +71,12 @@ public class Game
         renderer.addObject(ball);
     }
 
+    /**
+     * Moves the ball. Based on the acceleration and time (ball rolling)
+     * 
+     * @param acceleration  acceleration vector
+     * @param time          length of accleleration in ms
+     */
     public synchronized void moveBall(Vector3 acceleration, long time)
     {
         if (!dead)
@@ -106,46 +129,83 @@ public class Game
         }
     }
 
+    /**
+     * Renders objects contained in the game.
+     * @param gl            OPENGL context
+     * @param camPosition   camera position
+     */
     public synchronized void render(GL10 gl, Vector3 camPosition)
     {
         renderer.render(gl, camPosition);
     }
 
+    /**
+     * Updates scene objets.
+     * @param time update length in ms
+     */
     public synchronized void update(long time)
     {
         renderer.update(time);
     }
 
+    /**
+     * Returns player ball.
+     * @return player ball
+     */
     public synchronized Ball getBall()
     {
         return ball;
     }
 
+    /**
+     * Cleans up 3D objects.
+     * @param gl OPENGL context
+     */
     public void destroy(GL11 gl)
     {
         renderer.destroy(gl);
     }
 
+    /**
+     * Returns count of remaining gems.
+     * @return count of remaining gems
+     */
     public int getRemainingGems()
     {
         return currentLVL.getItemSet().getRemaining();
     }
 
+    /**
+     * Returns if game is over.
+     * @return game over
+     */
     public boolean isGameOver()
     {
         return gameOver;
     }
     
+    /**
+     * Return list of celtable items (gems).
+     * @return gems
+     */
     public List<Item> getItems()
     {
         return currentLVL.getItemSet().getItems();
     }
 
+    /**
+     * Returns current level ID.
+     * @return current level ID
+     */
     public int getLevelID()
     {
         return levelID;
     }
 
+    /**
+     * Sets current level ID.
+     * @param levelID current level ID
+     */
     public void setLevelID(int levelID)
     {
         this.levelID = levelID;
