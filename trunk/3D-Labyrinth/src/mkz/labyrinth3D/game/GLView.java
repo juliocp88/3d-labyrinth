@@ -19,30 +19,52 @@ import mkz.labyrinth3D.GameActivity;
 import mkz.labyrinth3D.R;
 
 /**
- *
+ * OPENGL view for game rendering.
  * @author Hans
  */
 public final class GLView extends GLSurfaceView implements GLSurfaceView.Renderer, AccelerometerListener
 {
+    /**Sleep time for physics update thread*/
     public static final long UPDATE_THREAD_SLEEP_TIME = 20;
+    /**Accelerometer sensitivity*/
     public static final float ACCELEROMETER_SENSITIVITY = 0.1f;
+    /**Accelerometer manager for change listening*/
     private AccelerometerManager accelerometerManager;
+    /**Curently played game*/
     private Game game;
+    /**Application context*/
     private Context context;
+    /**Acceleration vector*/
     private Vector3 acceleration;
+    /**Camera position*/
     private Vector3 camera;
+    /**Pressed arrows*/
     private boolean[] arows;
+    /**Rendering time of prevorious cycle.*/
     private long oldRenderTime;
+    /**Update time of prevorious physics update*/
     private long oldCycleTime;
+    /**OPENGL context*/
     private GL11 gl11;
+    /**Game activity reference*/
     private GameActivity gameActivity;
+    /**Counts frames*/
     private int fpsCounter;
+    /**Counts time for fps calculation*/
     private float fpsBuffer;
+    /**Game state (pause)*/
     private boolean pause;
+    /**Alert dialog for ingame menu*/
     private AlertDialog alertDialog;
+    /**Physics update thread*/
     private final Thread updateThread;
+    /**Number of remaining gems*/
     private int remainingGems;
 
+    /**
+     * Creates new OPENGL view
+     * @param context aplication context
+     */
     public GLView(Context context)
     {
         super(context);
@@ -80,6 +102,11 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         updateThread = new Thread(runable);
     }
 
+    /**
+     * Called when view surface is created.
+     * @param gl    OPENGL context
+     * @param cfg   OPENGL config
+     */
     public void onSurfaceCreated(GL10 gl, EGLConfig cfg)
     {
         gl11 = (GL11) gl;
@@ -107,6 +134,12 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         } 
     }
 
+    /**
+     * Called when surface is changed.
+     * @param gl        OPENGL context
+     * @param width     surface width
+     * @param height    surface height
+     */
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
         if (height == 0)
@@ -125,6 +158,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         gl.glLoadIdentity();
     }
 
+    /**
+     * Updates game physics.
+     */
     public void update()
     {
         long cycleTime = System.currentTimeMillis() - oldCycleTime;
@@ -182,6 +218,10 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         camera.y = game.getBall().position().y;
     }
 
+    /**
+     * Renders the scene.
+     * @param gl    OPENGL context
+     */
     public void onDrawFrame(GL10 gl)
     {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -205,6 +245,13 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         }
     }
 
+    /**
+     * Called when accelerometer valuers changes.
+     * 
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     */
     public void onAccelerationChanged(float x, float y, float z)
     {
         acceleration.x = x * ACCELEROMETER_SENSITIVITY;
@@ -212,6 +259,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         acceleration.z = z;
     }
 
+    /**
+     * Cleans up resources.
+     */
     public void destroy()
     {
         this.queueEvent(new Runnable()
@@ -228,6 +278,13 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         }
     }
 
+    /**
+     * Handles key press events.
+     * 
+     * @param keyCode   key code   
+     * @param event     key event
+     * @return          if handled
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -278,6 +335,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         return true;
     }
 
+    /**
+     * Pauses the game.
+     */
     public void pause()
     {
         pause = true;
@@ -310,6 +370,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         alertDialog.show();
     }
 
+    /**
+     * Player wins the game.
+     */
     public void win()
     {
         pause = true;
@@ -342,6 +405,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         });
     }
     
+    /**
+     * Player looses the game
+     */
     public void lost()
     {
         pause = true;
@@ -374,6 +440,9 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         });
     }
 
+    /**
+     * Resumes the game after pause.
+     */
     public void unPause()
     {
         if (alertDialog != null)
@@ -383,6 +452,13 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         pause = false;
     }
 
+    /**
+     * Handles key relase events.
+     * 
+     * @param keyCode   key code   
+     * @param event     key event
+     * @return          if handled
+     */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event)
     {
@@ -407,6 +483,11 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         return true;
     }
 
+    /**
+     * Handles the screen touch event.
+     * @param event Motion event
+     * @return      if handled
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -426,23 +507,19 @@ public final class GLView extends GLSurfaceView implements GLSurfaceView.Rendere
         return true;
     }
 
+    /**
+     * Sets the game activity.
+     * @param gameActivity game activity.
+     */
     public void setGameActivity(GameActivity gameActivity)
     {
         this.gameActivity = gameActivity;
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
+    /**
+     * Returns current game.
+     * @return current game
+     */
     public Game getGame()
     {
         return game;

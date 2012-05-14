@@ -8,38 +8,30 @@ import android.widget.TextView;
 import mkz.labyrinth3D.game.LevelMaps;
 
 /**
- *
+ * Main menu class.
  * @author Hans
  */
 public class MainMenuActivity extends Activity
 {
+    /**Selected level*/
     private int level = 0;
     
+    /**
+     * Called on activity creation.
+     * 
+     * @param savedInstanceState saved activity state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-    }
     
+    /**
+     * Left button event handle.
+     * @param v view (button)
+     */
     public void left(View v)
     {
         level--;
@@ -51,6 +43,10 @@ public class MainMenuActivity extends Activity
         levelView.setText("" + (level + 1));
     }
     
+    /**
+     * Right button event handle.
+     * @param v view (button)
+     */
     public void right(View v)
     {
         level++;
@@ -62,6 +58,10 @@ public class MainMenuActivity extends Activity
         levelView.setText("" + (level + 1));
     }
     
+    /**
+     * Launch button event handle. Starts the game activity.
+     * @param v view (button)
+     */
     public void testLaunch(View v)
     {
         Intent intent = new Intent(MainMenuActivity.this, GameActivity.class);
