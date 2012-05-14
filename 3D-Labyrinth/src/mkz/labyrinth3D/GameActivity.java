@@ -10,25 +10,34 @@ import mkz.labyrinth3D.game.objects.Hud;
 import mkz.labyrinth3D.game.objects.Item;
 import mkz.labyrinth3D.math.Vector3;
 
+/**
+ * Game activity, contains HUD and OPENGL view. Handles saving and loading of application state.
+ * @author Hans
+ */
 public class GameActivity extends Activity
 {
+    /**OPENGL view*/
     private GLView gLView;
+    /**HUD*/
     private Hud hud;
+    /**Activity layout*/
     private FrameLayout frameLayout;
+    /**List of collected items for state save.*/
     private List<Boolean> colectedItems;
+    /**Ball position for save state*/
     private Vector3 ballPosition;
+    /**Currently played level ID*/
     private int levelID;
 
     /**
-     * Creates new activity
+     * Creates new activity.
      * 
-     * @param savedInstanceState 
+     * @param savedInstanceState saved activity state
      */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        System.out.println("******************* ON CREATE");
         hud = new Hud(this);
         frameLayout = new FrameLayout(this);
         setContentView(frameLayout);
@@ -61,6 +70,9 @@ public class GameActivity extends Activity
         }
     }
 
+    /**
+     * Resumes the activity after getting to foreground.
+     */
     @Override
     protected void onResume()
     {
@@ -71,9 +83,11 @@ public class GameActivity extends Activity
         frameLayout.addView(gLView);
         frameLayout.addView(hud);
         gLView.onResume();
-        System.out.println("******************* ON RESUME");
     }
 
+    /**
+     * Restores the activity state.
+     */
     public void restore()
     {
         if (ballPosition == null)
@@ -103,12 +117,14 @@ public class GameActivity extends Activity
         }
     }
 
+    /**
+     * Pauses the activity after leaving foreground.
+     */
     @Override
     protected void onPause()
     {
         super.onPause();
         gLView.onPause();
-        System.out.println("******************* ON PAUSE");
         ballPosition = gLView.getGame().getBall().position();
         levelID = gLView.getGame().getLevelID();
         colectedItems.clear();
@@ -128,6 +144,9 @@ public class GameActivity extends Activity
         gLView = null;
     }
 
+    /**
+     * Cleans up resources after finish().
+     */
     @Override
     protected void onDestroy()
     {
@@ -136,9 +155,12 @@ public class GameActivity extends Activity
         {
             gLView.destroy();
         }
-        System.out.println("******************* ON DESTROY");
     }
 
+    /**
+     * Sets the current amount of FPS on HUD.
+     * @param fps current amount of FPS
+     */
     public void setFPS(final int fps)
     {
         runOnUiThread(new Runnable()
@@ -150,6 +172,10 @@ public class GameActivity extends Activity
         });
     }
 
+    /**
+     * Sets the current amount of GEMS on HUD.
+     * @param gems current amount of GEMS
+     */
     public void setGEMS(final int gems)
     {
         runOnUiThread(new Runnable()
@@ -161,32 +187,14 @@ public class GameActivity extends Activity
         });
     }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        System.out.println("******************* ON START");
-    }
-
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-        System.out.println("******************* ON STOP");
-    }
-
-    @Override
-    protected void onRestart()
-    {
-        super.onRestart();
-        System.out.println("******************* ON RESTART");
-    }
-
+    /**
+     * Reloads the saved state of activity.
+     * @param savedInstanceState saved state
+     */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         super.onRestoreInstanceState(savedInstanceState);
-        System.out.println("******************* ON RESTORE");
         colectedItems = new LinkedList<Boolean>();
         if (savedInstanceState != null)
         {
@@ -213,6 +221,10 @@ public class GameActivity extends Activity
         }
     }
 
+    /**
+     * Saves current state of activity.
+     * @param outState saved state
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {

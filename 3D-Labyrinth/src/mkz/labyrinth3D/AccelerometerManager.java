@@ -8,16 +8,31 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+/**
+ * Class for registering and using the accelerometer sensor.
+ * 
+ * @author Hans
+ */
 public class AccelerometerManager
 {
-
+    /**Accelerometer sensor*/
     private Sensor sensor;
+    /**System sensor manager*/
     private SensorManager sensorManager;
+    /**Sensor listening user class*/
     private AccelerometerListener listener;
+    /**Running switch*/
     private boolean running = false;
+    /**Application context*/
     private Context context;
+    /**Handler for sensor events*/
     private SensorEventListener sensorEventListener;
 
+    /**
+     * Creates new accelerometer sensor manager.
+     * 
+     * @param context   Application context
+     */
     public AccelerometerManager(Context context)
     {
         this.context = context;
@@ -38,11 +53,22 @@ public class AccelerometerManager
         };
     }
 
+    /**
+     * Returns the state of sensor manager.
+     * 
+     * @return running
+     */
     public boolean isRunning()
     {
         return running;
     }
 
+    /**
+     * Verifies if sensor is available.
+     * 
+     * @param context   applicaation context
+     * @return          supported
+     */
     public static boolean isSupported(Context context)
     {
         if (context != null)
@@ -64,6 +90,10 @@ public class AccelerometerManager
         }
     }
 
+    /**
+     * Starts the event generation of the sensor for specified listener.
+     * @param accelerometerListener listener for acceleration changes.
+     */
     public void startRunning(AccelerometerListener accelerometerListener)
     {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -76,6 +106,9 @@ public class AccelerometerManager
         }
     }
 
+    /**
+     * Stops event generation of the sensor.
+     */
     public void stopRunning()
     {
         running = false;
