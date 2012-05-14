@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="doc" name="api docs">
+<target name="doc" description="my docs">
+    <javadoc destdir="docs" doctitle="Testing the Title" verbose="on" 
+        use="true" 
+        classpath="c:\Dev\Android\android-sdk\platforms\android-2.1\android.jar;.\libs\admob-sdk-android.jar"
+        sourcepath="gen;src"
+        linkoffline="http://d.android.com/reference c:\Dev\Android\android-sdk\docs\reference"
+        stylesheetfile="c:\Dev\Android\android-sdk\docs\assets\android-developer-docs.css"
+        >
+    </javadoc>
+</target>
+</project>
