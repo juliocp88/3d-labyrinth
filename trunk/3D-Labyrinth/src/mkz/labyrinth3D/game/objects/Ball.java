@@ -11,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 /**
- *
+ * Player ball.
  * @author Hans
  */
 public class Ball extends Object3D
@@ -20,29 +20,39 @@ public class Ball extends Object3D
     public static final float BALL_RADIUS = 0.3f;
     /**Radius in meters*/
     public static final float MAX_VELOCITY = 6f;
-    /**Weight in kilograms*/
-    public static final float BALL_MASS = 350.0f;
+    
+    /**Bounding box for ball*/
     public Rect boundingBox;
-    private float[] sunDifuse = new float[]
-    {
-        1f, 1f, 0.6f, 1
-    };
-    private float[] sunAmbient = new float[]
-    {
-        0.0f, 0.0f, 0.0f, 1
-    };
+    /**Ball radius*/
     private float radius;
+    /**Number of slices on ball*/
     private int slices;
+    /**Number of stacks on ball*/
     private int stacks;
+    /**Buffer for slices*/
     private FloatBuffer[] slicesBuffers;
+    /**Buffer for normals*/
     private FloatBuffer[] normalsBuffers;
+    /**Buffer for texture coordinates*/
     private FloatBuffer[] texCoordsBuffers;
+    /**Buffer for indices*/
     private ShortBuffer[] indicesBuffers;
+    /**Ball position*/
     private Vector3 position;
+    /**Ball velocity*/
     private Vector2 velocity;
+    /**Ball rotation*/
     private Vector2 rotation;
-    float test;
 
+    /**
+     * Creates new ball.
+     * 
+     * @param radius    Ball radius
+     * @param slices    Number of slices
+     * @param stacks    Nuber of stacks
+     * @param gl        OPENGL context
+     * @param texture   Texture
+     */
     public Ball(float radius, int slices, int stacks, GL11 gl, Texture texture)
     {
         this.radius = radius;
@@ -68,6 +78,10 @@ public class Ball extends Object3D
         boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
 
+    /**
+     * Creates 3D sphere.
+     * @param gl OPENGL context
+     */
     private void createSphere(GL11 gl)
     {
         slicesBuffers = new FloatBuffer[slices];
@@ -208,6 +222,11 @@ public class Ball extends Object3D
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    /**
+     * Moves the ball (roll).
+     * @param acceleration  Acceleration vector
+     * @param time          Acceleration duration in ms
+     */
     public void move(Vector3 acceleration, long time)
     {
         float duration = ((float) time) / 1000.0f;
@@ -235,6 +254,11 @@ public class Ball extends Object3D
         boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
 
+    /**
+     * Moves the ball on new position (teleport).
+     * @param newPosition   new position
+     * @param axxis         bounce axxis if the ball bounced of a wall
+     */
     public void move(Vector3 newPosition, int axxis)
     {
         //rotation.x += (newPosition.x - position.x) / BALL_RADIUS * 57.3f;
@@ -260,33 +284,22 @@ public class Ball extends Object3D
         boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
     }
 
-    public void bounce(Vector2 normal)
-    {
-        //this.Velocity = velocity - (2 * (velocity * normal)) * normal;
-        velocity = velocity.sub(normal.mul(velocity.dot(normal) * 2));
-
-        velocity.x = -velocity.x;
-        velocity.y = -velocity.y;
-
-        rotation.x -= velocity.x / BALL_RADIUS * 57.3f;
-        rotation.y -= velocity.y / BALL_RADIUS * 57.3f;
-
-        position.x = position.x - (velocity.y);
-        position.y = position.y + (velocity.x);
-
-        int sizeCentimeters = (int) (BALL_RADIUS * 100);
-        boundingBox.left = (int) (-position.x * 100 - sizeCentimeters);
-        boundingBox.top = (int) (position.y * 100 - sizeCentimeters);
-        boundingBox.right = (int) (-position.x * 100 + sizeCentimeters);
-        boundingBox.bottom = (int) (position.y * 100 + sizeCentimeters);
-    }
-
+    /**
+     * Ball does not colide with ball.
+     * @param ball  Ball
+     * @return      False
+     */
     @Override
     public boolean colidesWith(Ball ball)
     {
         return false;
     }
 
+    /**
+     * Renders the ball.
+     * @param gl            OPENGL context.
+     * @param camPosition   camera position
+     */
     @Override
     public void render(GL11 gl, Vector3 camPosition)
     {
@@ -340,37 +353,61 @@ public class Ball extends Object3D
         gl.glPopMatrix();
     }
 
+    /**
+     * Distance from position.
+     * @param from  position
+     * @return      distance
+     */
     @Override
     public float distance(Vector3 from)
     {
         return Vector3.vectorDistance(from, position);
     }
 
+    /**
+     * Ball position.
+     * @return position
+     */
     @Override
     public Vector3 position()
     {
         return position;
     }
 
+    /**
+     * Updates ball.
+     * @param time time in ms
+     */
     @Override
     public void update(long time)
     {
-        float duration = ((float) time) / 1000.0f;
-
+        //Does nothing
     }
 
+    /**
+     * Ball is always displayed.
+     * @return true
+     */
     @Override
     public boolean displayed()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true;
     }
 
+    /**
+     * Ball is always displayed.
+     * @param displayed does nothing
+     */
     @Override
     public void setDisplayed(boolean displayed)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Does nothing
     }
 
+    /**
+     * Cleans up resources.
+     * @param gl OPENGL context
+     */
     @Override
     public void destroy(GL11 gl)
     {

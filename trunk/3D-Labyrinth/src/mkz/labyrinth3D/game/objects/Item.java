@@ -6,19 +6,30 @@ import javax.microedition.khronos.opengles.GL11;
 import mkz.labyrinth3D.math.Vector3;
 
 /**
- *
+ * Collectable item.
  * @author Hans
  */
 public class Item
 {
+    /**Item size in cm*/
     private static int SIZE = 60;
+    /**3D model*/
     private static Ball gem = null;
+    /**Position*/
     private Vector3 position;
+    /**Collected property*/
     private boolean collected;
+    /**Bounding box for colision*/
     private Rect boundingBox;
+    /**Rotation angle*/
     private float rotation;
+    /**Height*/
     private float height;
 
+    /**
+     * Creates new item on defined position.
+     * @param position position
+     */
     public Item(Vector3 position)
     {
         this.position = position;
@@ -31,16 +42,30 @@ public class Item
         rotation = (float) (Math.random() * 360);
     }
 
+    /**
+     * Creates gem 3D model (same for all items)
+     * @param gl        OPENGL context
+     * @param texture   texture
+     */
     public static void createGemVBO(GL11 gl, Texture texture)
     {
         gem = new Ball(0.3f, 5, 2, gl, texture);
     }
 
+    /**
+     * Detects colision with ball.
+     * @param ball  Player ball
+     * @return      colision status
+     */
     public boolean colidesWith(Ball ball)
     {
         return Rect.intersects(boundingBox, ball.boundingBox);
     }
 
+    /**
+     * Binds buffers for items. 
+     * @param gl OPENGL context
+     */
     public static void bindBuffers(GL11 gl)
     {
         gl.glBindTexture(GL10.GL_TEXTURE_2D, gem.texture.texPointer);
@@ -63,6 +88,10 @@ public class Item
         gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, gem.ibo);
     }
 
+    /**
+     * Cleans buffers.
+     * @param gl OPENGL context
+     */
     public static void cleanBuffers(GL11 gl)
     {
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -74,6 +103,11 @@ public class Item
         gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
     }
 
+    /**
+     * Renders one item.
+     * @param gl            OPENGL context
+     * @param camPosition   camera position
+     */
     public void render(GL11 gl, Vector3 camPosition)
     {
         gl.glPushMatrix();
@@ -89,16 +123,29 @@ public class Item
         gl.glPopMatrix();
     }
 
+    /**
+     * Returns distance from position.
+     * @param from  position
+     * @return      distance
+     */
     public float distance(Vector3 from)
     {
         return Vector3.vectorDistance(from, position);
     }
 
+    /**
+     * Item position.
+     * @return position
+     */
     public Vector3 position()
     {
         return position;
     }
 
+    /**
+     * Updates item rotation and height in time.
+     * @param time time in ms
+     */
     public void update(long time)
     {
         float timeF = time / 1000f;
@@ -107,21 +154,37 @@ public class Item
         height = (float) Math.sin(rotation / 10f) * 0.06f;
     }
 
+    /**
+     * Returns if item should be displayed.
+     * @return displayed
+     */
     public boolean displayed()
     {
         return !collected;
     }
 
+    /**
+     * Sets if the item should be displayed.
+     * @param displayed displayed
+     */
     public void setDisplayed(boolean displayed)
     {
         collected = !displayed;
     }
 
+    /**
+     * Returns 3D model.
+     * @return 3D model of item
+     */
     public static Ball getGem()
     {
         return gem;
     }
 
+    /**
+     * Cleans up resources.
+     * @param gl OPENGL context
+     */
     public void destroy(GL11 gl)
     {
         if (gem != null)

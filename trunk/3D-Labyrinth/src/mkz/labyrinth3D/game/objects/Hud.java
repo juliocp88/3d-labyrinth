@@ -7,14 +7,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
- *
+ * Heads Up Display with FPS counter and Remaining GEMS counter.
  * @author Hans
  */
 public class Hud extends RelativeLayout
 {
-    TextView fpsTW;
-    TextView colectTW;
+    /**TextField with FPS*/
+    private TextView fpsTW;
+    /**TextField with GEMS*/
+    private TextView colectTW;
 
+    /**
+     * Creates new HUD.
+     * @param context application context
+     */
     public Hud(Context context)
     {
         super(context);
@@ -37,6 +43,10 @@ public class Hud extends RelativeLayout
         this.addView(colectTW);
     }
     
+    /**
+     * Sets new FPS value.
+     * @param fps value
+     */
     public void setFPS(int fps)
     {
         if (fps < 0)
@@ -53,6 +63,10 @@ public class Hud extends RelativeLayout
         }
     }
     
+    /**
+     * Sets new GEM value.
+     * @param gems value
+     */
     public void setGEMS(int gems)
     {
         if (gems < 0)

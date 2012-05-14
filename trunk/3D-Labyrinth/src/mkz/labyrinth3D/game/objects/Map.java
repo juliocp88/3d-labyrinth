@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mkz.labyrinth3D.game.objects;
 
 import android.graphics.Rect;
@@ -13,17 +9,29 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 /**
- *
+ * 3D map of playbable area.
  * @author Hans
  */
 public class Map extends Object3D
 {
+    /**Vertices count*/
     private int verticesCount;
+    /**Triangle count*/
     private int triangleCount;
+    /**Wall colisoun bounding boxes array*/
     private Rect[] wallBoundingBoxes;
+    /**Hole colision positions array*/
     private Vector2[] holePositions;
+    /**Level map*/
     private int[][] map;
 
+    /**
+     * Creates new map.
+     * 
+     * @param mapArray  Level map
+     * @param texture   Texture atlas
+     * @param gl        OPENGL context
+     */
     public Map(int[][] mapArray, Texture texture, GL11 gl)
     {
         this.map = new int[mapArray.length][mapArray[0].length];
@@ -538,6 +546,8 @@ public class Map extends Object3D
                 }
             }
         }
+        
+        //BUFFERS
 
         //Vertices
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -617,6 +627,11 @@ public class Map extends Object3D
         return colision;
     }
 
+    /**
+     * Renders the map
+     * @param gl            OPENGL context
+     * @param camPosition   camera position
+     */
     @Override
     public void render(GL11 gl, Vector3 camPosition)
     {
@@ -666,6 +681,13 @@ public class Map extends Object3D
         gl.glPopMatrix();
     }
 
+    /**
+     * Determines the direction of colision.
+     * 
+     * @param ball  Ball bounding box
+     * @param wall  Wall bounding box
+     * @return      Colision direction
+     */
     private Vector2 getCollisionCourse(Rect ball, Rect wall)
     {
         Rect intersect = new Rect(Math.max(ball.left, wall.left), Math.max(ball.top, wall.top), Math.min(ball.right, wall.right), Math.min(ball.bottom, wall.bottom));
@@ -687,6 +709,12 @@ public class Map extends Object3D
         return collision.mul(0.01f);
     }
 
+    /**
+     * Finds out if ball is falling in some hole
+     * 
+     * @param ball  Ball
+     * @return      Hole if falls, null othewise
+     */
     public Vector2 fallsInHole(Ball ball)
     {
         for (Vector2 hole : holePositions)
@@ -699,36 +727,61 @@ public class Map extends Object3D
         return null;
     }
 
+    /**
+     * Returns 0. Has no use.
+     * @param from  position from
+     * @return      0
+     */
     @Override
     public float distance(Vector3 from)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
+    /**
+     * Returns zero Vector. Has no use.
+     * @return zero vector
+     */
     @Override
     public Vector3 position()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new Vector3();
     }
 
+    /**
+     * Does nothing.
+     * @param time time in ms
+     */
     @Override
     public void update(long time)
     {
         //Nothing
     }
 
+    /**
+     * Return true, map is always displayed.
+     * @return true
+     */
     @Override
     public boolean displayed()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true;
     }
 
+    /**
+     * Does nothing.
+     * @param displayed nothing
+     */
     @Override
     public void setDisplayed(boolean displayed)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Nothing
     }
 
+    /**
+     * Clears up resources.
+     * @param gl OPENGL context
+     */
     @Override
     public void destroy(GL11 gl)
     {
