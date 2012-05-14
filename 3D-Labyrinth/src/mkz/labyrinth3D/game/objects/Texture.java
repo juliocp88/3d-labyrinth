@@ -11,14 +11,22 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * Texture for Object 3D.
  * @author Hans
  */
 public class Texture
 {
+    /**Texture coordinates*/
     private int[] texCoord;
+    /**Texture pointer*/
     public int texPointer;
 
+    /**
+     * Creates new texture.
+     * @param gl            OPENGL context
+     * @param context       Application context
+     * @param resource      resource ID
+     */
     public Texture(GL10 gl, Context context, int resource)
     {
         texCoord = new int[1];
@@ -27,6 +35,12 @@ public class Texture
         gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
     }
 
+    /**
+     * Loads the texture to memory.
+     * @param gl            OPENGL context
+     * @param context       Application context
+     * @param resource      resource ID
+     */
     private void loadTexture(GL10 gl, Context context, int resource)
     {
         Bitmap bitmap = null;
@@ -57,6 +71,10 @@ public class Texture
         bitmap.recycle();
     }
 
+    /**
+     * Calculates texture MIPMAPS and saves them to memory.
+     * @param bitmap source bitmap
+     */
     private void makeMipmap(Bitmap bitmap)
     {
         int level = 0;
@@ -97,6 +115,13 @@ public class Texture
         }
     }
     
+    /**
+     * Returns texture coordinates from indexes in atlas textures.
+     * @param x     position x in atlas
+     * @param y     position y in atlas
+     * @param size  texture size
+     * @return      texture coordinates
+     */
     public static Vector2[] getAtlasTexCoordinates(int x, int y, int size)
     {
         float length = 1.0f / size;
@@ -115,6 +140,10 @@ public class Texture
         };
     }
     
+    /**
+     * Cleans up memory.
+     * @param gl OPENGL context
+     */
     public void destroy(GL10 gl)
     {
         gl.glDeleteTextures(1, texCoord, 0);
