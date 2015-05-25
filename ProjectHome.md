@@ -1,0 +1,1 @@
+Accelerometer controled ball in 3D labyrinth. Semestral work for KIV/MKZ on University of western Bohemia
